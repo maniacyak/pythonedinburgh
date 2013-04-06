@@ -76,6 +76,3 @@ def get_tweets():
     return tweets
 
 app.secret_key = '7%@0g6y!hu^flbmkcfb$@zxs9ftmh=t0blgnog-ibh52za$6nu'
-
-if __name__ == '__main__':
-    app.run()
