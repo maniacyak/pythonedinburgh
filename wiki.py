@@ -309,10 +309,4 @@ class HideReferers(Transform):
     return 'href="%s"' % (url,)
 
 
-def main():
-  application = webapp.WSGIApplication([('/(.*)', WikiPage)], debug=_DEBUG)
-  run_wsgi_app(application)
-
-
-if __name__ == '__main__':
-  main()
+application = webapp.WSGIApplication([('/(.*)', WikiPage)], debug=_DEBUG)

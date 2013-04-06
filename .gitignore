@@ -9,3 +9,5 @@ settings_local.py
 *.swp
 *.un~
 *.svn/*
+.dev_activate
+.idea

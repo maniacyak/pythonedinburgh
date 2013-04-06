@@ -52,8 +52,8 @@ def get_tweets():
     if tweets is None:
         credentials = TwitterCredentials.all().get()
         if credentials:
-            auth = tweepy.OAuthHandler(credentials.consumer_key, credentials.consumer_secret)
-            auth.set_access_token(credentials.access_token, credentials.access_secret)
+            auth = tweepy.OAuthHandler(str(credentials.consumer_key), str(credentials.consumer_secret))
+            auth.set_access_token(str(credentials.access_token), str(credentials.access_secret))
             api = tweepy.API(auth_handler=auth)
 
             # Added for offline development.
@@ -72,6 +72,7 @@ def get_tweets():
                     consumer_secret='a', access_secret='a')
             db.put(credentials)
 
+    logging.info(tweets)
     return tweets
 
 app.secret_key = '7%@0g6y!hu^flbmkcfb$@zxs9ftmh=t0blgnog-ibh52za$6nu'

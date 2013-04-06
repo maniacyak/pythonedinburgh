@@ -9,6 +9,7 @@ import re
 
 from tweepy.error import TweepError
 from tweepy.utils import convert_to_utf8_str
+from tweepy.models import Model
 
 re_path_template = re.compile('{\w+}')
 
@@ -24,6 +25,7 @@ def bind_api(**config):
         method = config.get('method', 'GET')
         require_auth = config.get('require_auth', False)
         search_api = config.get('search_api', False)
+        use_cache = config.get('use_cache', True)
 
         def __init__(self, api, args, kargs):
             # If authentication is required and no credentials
@@ -61,12 +63,14 @@ def bind_api(**config):
             # Manually set Host header to fix an issue in python 2.5
             # or older where Host is set including the 443 port.
             # This causes Twitter to issue 301 redirect.
-            # See Issue http://github.com/joshthecoder/tweepy/issues/#issue/12
+            # See Issue https://github.com/tweepy/tweepy/issues/12
             self.headers['Host'] = self.host
 
         def build_parameters(self, args, kargs):
             self.parameters = {}
             for idx, arg in enumerate(args):
+                if arg is None:
+                    continue
 
                 try:
                     self.parameters[self.allowed_param[idx]] = convert_to_utf8_str(arg)
@@ -105,16 +109,18 @@ def bind_api(**config):
 
             # Query the cache if one is available
             # and this request uses a GET method.
-            if self.api.cache and self.method == 'GET':
+            if self.use_cache and self.api.cache and self.method == 'GET':
                 cache_result = self.api.cache.get(url)
                 # if cache result found and not expired, return it
                 if cache_result:
                     # must restore api reference
                     if isinstance(cache_result, list):
                         for result in cache_result:
-                            result._api = self.api
+                            if isinstance(result, Model):
+                                result._api = self.api
                     else:
-                        cache_result._api = self.api
+                        if isinstance(cache_result, Model):
+                            cache_result._api = self.api
                     return cache_result
 
             # Continue attempting request until successful
@@ -167,7 +173,7 @@ def bind_api(**config):
             conn.close()
 
             # Store result into cache if one is available.
-            if self.api.cache and self.method == 'GET' and result:
+            if self.use_cache and self.api.cache and self.method == 'GET' and result:
                 self.api.cache.store(url, result)
 
             return result
