@@ -1,0 +1,29 @@
+.banner {
+    color: white;
+    background-color: #1476b6;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 30pt;
+    line-height: 100%;
+    padding: 12px;
+    height: 50px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .banner {
+        line-height: 130%;
+        font-size: 24pt;
+    }
+}
+
+.banner img {
+    vertical-align: baseline;
+    margin-right: 12px;
+    float: left;
+}
+
+.footer {
+    padding: 12px;
+    text-align: center;
+    background-color: lightgray;
+}
