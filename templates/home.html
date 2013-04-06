@@ -2,18 +2,14 @@
 
 {% block content %}
 
-	<div class="prepend-1 span-22 last">
-		
 		<h1>Python Edinburgh</h1>
 		<h3>The user group for Pythonistas in Edinburgh.</h3>
 		
 		<p>
-			We're a user group providing social, professional and technical
+			We're a user group providing technical, professional and social
 			support for Python programmers based in Edinburgh. We meet in the
-			pub monthly, and are planning other events in future!
+			pub monthly, and periodically run other events.
 		</p>
-		
-	</div>
 	
 	<div class="prepend-top prepend-1 span-22 last">
 		
@@ -21,23 +17,23 @@
 		
 		<p>
 			Python Edinburgh meets on the <strong>4th Tuesday</strong> of 
-			each month. Other events such as talks and sprints will be hosted
-			less regularly. 
+			each month. Other events such as talks and sprints are hosted
+			less frequently.
         </p>
         {% if upcoming_events|count == 0 %}
         <p>
-            There are no meetings arranged for the next month.
+            There are no events arranged in the near future.
         </p>
         {% elif upcoming_events|count == 1 %}
         <p>
-            The next meeting is <strong>{{upcoming_events[0].title}}</strong> on {{upcoming_events[0].date_string()}} in {{upcoming_events[0].where}}.
+            The next event is <strong>{{upcoming_events[0].title}}</strong> on {{upcoming_events[0].date_string()}} in {{upcoming_events[0].where}}.
         </p>
         {% else %}
         <p>
-            The upcoming meetings in the next month are:
+            Upcoming events are:
         </p>
         <ul>
-        {% for e in upcoming_events %}
+        {% for e in upcoming_events|reverse %}
             <li>
                 <strong>{{e.title}}</strong> on {{e.date_string()}} in {{e.where}}
             </li>
