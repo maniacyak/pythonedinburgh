@@ -79,7 +79,12 @@ def get_tweets():
 class TweetSummary(object):
     def __init__(self, tweet):
         self.text = tweet.text
-        self.profile_image_url = tweet.author.profile_image_url
+
+        if hasattr(tweet, 'retweeted_status'):
+            self.profile_image_url = tweet.retweeted_status.author.profile_image_url
+        else:
+            self.profile_image_url = tweet.author.profile_image_url
+
         self.when = tweet.created_at
 
     @property
