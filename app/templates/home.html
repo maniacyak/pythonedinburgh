@@ -77,10 +77,10 @@
             {% for tweet in tweets %}
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object avatar" src="http://lorempixel.com/64/64">
+                        <img class="media-object avatar" src="{{ tweet.profile_image_url }}">
                     </a>
                     <div class="media-body">
-                        {{ tweet }}
+                        {{ tweet.html }}
                     </div>
                 </div>
             {% endfor %}

@@ -33,7 +33,7 @@ def twitterfy(tweet):
     pattern = re.compile(r"(?P<start>.?)#(?P<hashtag>[A-Za-z0-9_]+)(?P<end>.?)")
 
     # replace with link to search
-    link = r'\g<start>#<a href="http://search.twitter.com/search?q=\g<hashtag>"  title="#\g<hashtag> search Twitter">\g<hashtag></a>\g<end>'
+    link = r'\g<start>#<a href="http://twitter.com/search?q=\g<hashtag>"  title="#\g<hashtag> search Twitter">\g<hashtag></a>\g<end>'
     text = pattern.sub(link,tweet)
 
     # find usernames
@@ -60,9 +60,10 @@ def get_tweets():
             try:
                 statuses = api.user_timeline('pythonedinburgh', count=5)
             except tweepy.TweepError:
-                return {}
+                logging.exception("Exception obtaining tweets")
+                return []
 
-            tweets = [twitterfy(status.text) for status in statuses]
+            tweets = [TweetSummary(status) for status in statuses]
 
             if not memcache.add("tweets", tweets, 60 * 10): # 10 mins.
                 logging.error("Memcache tweet store failed.")
@@ -72,7 +73,18 @@ def get_tweets():
                     consumer_secret='a', access_secret='a')
             db.put(credentials)
 
-    logging.info(tweets)
     return tweets
+
+
+class TweetSummary(object):
+    def __init__(self, tweet):
+        self.text = tweet.text
+        self.profile_image_url = tweet.author.profile_image_url
+        self.when = tweet.created_at
+
+    @property
+    def html(self):
+        return twitterfy(self.text)
+
 
 app.secret_key = '7%@0g6y!hu^flbmkcfb$@zxs9ftmh=t0blgnog-ibh52za$6nu'
