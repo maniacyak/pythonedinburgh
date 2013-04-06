@@ -66,11 +66,11 @@ def upcoming_events():
         query.orderby = 'starttime'
         query.sortorder = 'ascending'
 
-        # we're interested in events in the next 30 days
-        # if we wanted all the futuer events, we'd use
+        # we're interested in events in the next 60 days
+        # if we wanted all the future events, we'd use
         # query.futureevents='true'
         # and ignore the start_min, start_max options
-        month_offset = datetime.timedelta(days=30)
+        month_offset = datetime.timedelta(days=90)
 
         start_min = datetime.datetime.now()
         start_max = start_min + month_offset
@@ -80,8 +80,9 @@ def upcoming_events():
 
         # query gcal for the time interval
         events = [CalendarEvent(e)
-                for e in calendar_client.CalendarQuery(query).entry]
-
+                  for e in calendar_client.CalendarQuery(query).entry]
+        for e in reversed(events):
+            logging.debug("{} - {}".format(e.title, e.date_string()))
         upcoming_events = events
 
         if not memcache.add("upcoming-events", upcoming_events, 60 * 60):  # 60 mins.
