@@ -27,11 +27,15 @@ def _nth(num):
 class CalendarEvent(object):
     def __init__(self, atom_ob):
         self.title = atom_ob.title.text
-        whs = atom_ob.when[0].start_time
-        whs = whs.split('.')[0]
-        try:
-            self.when = datetime.datetime.strptime(whs, '%Y-%m-%dT%H:%M:%S')
-        except ValueError:
+        #print atom_ob
+        if atom_ob.when:
+            whs = atom_ob.when[0].start_time
+            whs = whs.split('.')[0]
+            try:
+                self.when = datetime.datetime.strptime(whs, '%Y-%m-%dT%H:%M:%S')
+            except ValueError:
+                self.when = ""
+        else:
             self.when = ""
         self.where = atom_ob.where[0].value_string
 
