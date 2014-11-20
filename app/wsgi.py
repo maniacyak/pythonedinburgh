@@ -11,7 +11,7 @@ from .views import mod
 class App(Flask):
     pass
 
-app = App("pythonedinburgh",
+app = App(__name__,
           template_folder='templates',
           static_folder='static')
 app.register_blueprint(mod)
