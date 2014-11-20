@@ -15,7 +15,3 @@ app = App("pythonedinburgh",
           template_folder='templates',
           static_folder='static')
 app.register_blueprint(mod)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
