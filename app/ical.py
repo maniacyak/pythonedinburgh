@@ -3,7 +3,6 @@ from __future__ import print_function, absolute_import
 from datetime import date, datetime, timedelta
 import logging
 
-
 import yaml
 import pytz
 import requests

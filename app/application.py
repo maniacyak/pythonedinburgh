@@ -2,8 +2,6 @@ import logging
 import re
 
 from django.utils.html import urlize
-from google.appengine.api import memcache
-from google.appengine.ext import db
 
 from flask import Flask
 from flask import render_template
@@ -69,9 +67,6 @@ def get_tweets():
                 logging.error("Memcache tweet store failed.")
         else:
             logging.warning("No Twitter credentials were found in the database. Creating them")
-            credentials = TwitterCredentials(consumer_key='a', access_token='a',
-                    consumer_secret='a', access_secret='a')
-            db.put(credentials)
 
     return tweets
 
