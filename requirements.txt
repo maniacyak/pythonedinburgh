@@ -3,7 +3,9 @@ Jinja2==2.7.3
 MarkupSafe==0.23
 Werkzeug==0.9.6
 gunicorn==19.1.1
+icalendar==3.8.4
 itsdangerous==0.24
+pytz==2014.9
 requests==2.4.3
 tweepy==2.3.0
 wsgiref==0.1.2
