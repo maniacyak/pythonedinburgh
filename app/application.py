@@ -7,7 +7,7 @@ from google.appengine.ext import db
 
 from flask import Flask
 from flask import render_template
-import gcal
+import ical
 from jinja2 import Markup
 import tweepy
 
@@ -25,7 +25,7 @@ class TwitterCredentials(db.Model):
 def home():
     return render_template('home.html',
             tweets=get_tweets(),
-            upcoming_events =gcal.upcoming_events());
+            upcoming_events =ical.upcoming_events());
 
 
 def twitterfy(tweet):
@@ -68,7 +68,7 @@ def get_tweets():
             if not memcache.add("tweets", tweets, 60 * 10): # 10 mins.
                 logging.error("Memcache tweet store failed.")
         else:
-            logging.warn("No Twitter credentials were found in the database. Creating them")
+            logging.warning("No Twitter credentials were found in the database. Creating them")
             credentials = TwitterCredentials(consumer_key='a', access_token='a',
                     consumer_secret='a', access_secret='a')
             db.put(credentials)

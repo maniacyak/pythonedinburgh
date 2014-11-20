@@ -8,7 +8,9 @@ libraries:
 - name: django
   version: "1.4"
 - name: jinja2
-  version: "latest"
+  version: latest
+- name: ssl
+  version: latest
 
 handlers:
 - url: /static
@@ -21,7 +23,5 @@ handlers:
   static_files: static/robots.txt
   upload: static/robots.txt
 
-- url: /wiki/.*
-  script: wiki.application
 - url: .*
   script: application.app
