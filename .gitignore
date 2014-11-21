@@ -9,6 +9,7 @@
 *.tmp_*
 *.un~
 .dev_activate
+.env
 .idea
 settings_local.py
 venv

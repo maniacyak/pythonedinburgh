@@ -3,13 +3,14 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from flask import Flask, render_template
+from flask import Flask
 
 from .views import mod
 
 
 class App(Flask):
     pass
+
 
 app = App(__name__,
           template_folder='templates',

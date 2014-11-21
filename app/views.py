@@ -1,9 +1,14 @@
 from flask import Blueprint, render_template
 
+from .twitter import Twitter
+
 mod = Blueprint('base', __name__)
 
+twitter_client = Twitter()
+
+
 def get_tweets():
-    return []
+    return twitter_client.get_tweets('pythonedinburgh')
 
 
 def upcoming_events():

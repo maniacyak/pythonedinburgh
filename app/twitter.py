@@ -10,18 +10,17 @@ from jinja2 import Markup
 from jinja2.utils import urlize
 from tweepy import OAuthHandler, API, TweepError
 
-
 def twitterfy(tweet):
-
     tweet = urlize(tweet)
 
     # find hashtags
-    pattern = compile(r"(?P<start>.?)#(?P<hashtag>[A-Za-z0-9\-_]+)(?P<end>.?)")
+    # pattern = compile(r"(?P<start> ?)#(?P<hashtag>[A-Za-z0-9\-_]+)(?P<end>.?)")
 
     # replace with link to search
     link = (r'\g<start>#<a href="http://search.twitter.com/search?q=\g<hashtag'
             '>"  title="#\g<hashtag> search Twitter">\g<hashtag></a>\g<end>')
-    text = pattern.sub(link, tweet)
+    #text = pattern.sub(link, tweet)
+    text = tweet
 
     # find usernames
     pattern = compile(r"(?P<start>.?)@(?P<user>[A-Za-z0-9_]+)(?P<end>.?)")
@@ -55,6 +54,26 @@ class TwitterCredentials(object):
             return None
 
 
+class TweetWrapper(object):
+    def __init__(self, tweet):
+        self.tweet = tweet
+
+    @property
+    def markup(self):
+        return twitterfy(self.tweet.text)
+
+    @property
+    def author(self):
+        if hasattr(self.tweet, 'retweeted_status'):
+            return self.tweet.retweeted_status.user
+        else:
+            return self.tweet.user
+
+    @property
+    def profile_image(self):
+        return self.author.profile_image_url
+
+
 class Twitter(object):
     def __init__(self, credentials=None):
         self.api = None
@@ -69,16 +88,16 @@ class Twitter(object):
                                   credentials.access_secret)
             self.api = API(auth_handler=auth)
 
-    def get_tweets(self, count=5):
+    def get_tweets(self, screen_name, count=5):
         if self.api is None:
             logging.error("No Twitter credentials were found.")
             # We don't have login stuff, bail.
             return []
 
         try:
-            statuses = self.api.user_timeline('pythonedinburgh', count=count)
+            statuses = self.api.user_timeline(screen_name, count=count)
         except TweepError:
             logging.error("Failed to read timeline.")
             return []
 
-        return [(status, twitterfy(status.text)) for status in statuses]
+        return [TweetWrapper(status) for status in statuses]
